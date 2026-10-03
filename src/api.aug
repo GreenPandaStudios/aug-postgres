@@ -1,0 +1,50 @@
+// aug-spec: "api.aug.md" explains this file. Read it before changes; refresh with aug spec.
+import Pool and Connection and Result from bindings
+import PostgresError and DatabaseStorage from contracts
+extern C _pool(string configuration, int maximum, int connectMilliseconds, int cleanupMilliseconds) returns own Pool unless PostgresError
+extern C _acquire(borrow Pool pool) returns own Connection unless PostgresError changes pool
+extern C _query(borrow Connection connection, string sql, List<string> parameters, int milliseconds, int maximumRows, int maximumBytes) returns own Result unless PostgresError changes connection
+extern C _rows(Result result) returns int unless PostgresError
+extern C _isNull(Result result, int row, int column) returns bool unless PostgresError
+extern C _text(Result result, int row, int column) returns string unless PostgresError
+extern C _bytes(Result result, int row, int column) returns Bytes unless PostgresError
+/** Configure a pool without connecting. Acquire opens or reuses a session on this OS thread. The DSN must provide one numeric host, Unix socket, or numeric hostaddr. Comma-separated host lists are rejected. TLS callers supply sslmode=verify-full and an explicit trust root. */
+NativeDatabaseStorage() implements DatabaseStorage:
+    open(string configuration, int maximum, int connectMilliseconds, int cleanupMilliseconds) returns own Pool:
+        unsafe:
+            return _pool(configuration, maximum, connectMilliseconds, cleanupMilliseconds)
+/** Lease one session. Full pools fail immediately with code -4; there is no unbounded waiter queue. Release returns an idle session or rolls back an unfinished transaction within the cleanup deadline. */
+acquire(borrow Pool pool) returns own Connection:
+    unsafe:
+        return _acquire(pool)
+/** Execute one labeled, parameterized statement. Use $1, $2 and explicit PostgreSQL casts. Parameters are text; encode bytea as \x plus Bytes.hex(). BEGIN, SAVEPOINT and advisory locks use this same leased connection. Copied results obey maximumRows and maximumBytes. The timeout and cancellation discard the session after bounded cancellation dispatch. */
+query(borrow Connection connection, string sql, List<string> parameters, int milliseconds, int maximumRows, int maximumBytes) returns own Result:
+    unsafe:
+        return _query(connection, sql, parameters, milliseconds, maximumRows, maximumBytes)
+/** Number of copied rows. */
+rows(Result result) returns int:
+    unsafe:
+        return _rows(result)
+/** Distinguish SQL NULL from an empty string or buffer. */
+isNull(Result result, int row, int column) returns bool:
+    unsafe:
+        return _isNull(result, row, column)
+/** Copy a non-null column in PostgreSQL UTF-8 text form. */
+text(Result result, int row, int column) returns string:
+    unsafe:
+        return _text(result, row, column)
+/** Copy a non-null bytea column, including embedded zero bytes. */
+bytes(Result result, int row, int column) returns Bytes:
+    unsafe:
+        return _bytes(result, row, column)
+/** Decode the exact five-character server SQLSTATE. Client errors return an empty string. */
+sqlState(PostgresError error) returns string:
+    if error.code <= 0 or error.code > 60466176:
+        return ""
+    alphabet = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    value = error.code - 1
+    state = ""
+    for index in [0, 1, 2, 3, 4]:
+        state = alphabet.get(index=value - value / 36 * 36) + state
+        value = value / 36
+    return state

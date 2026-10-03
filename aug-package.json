@@ -1,0 +1,124 @@
+{
+  "format": 2,
+  "name": "@greenpandastudios/aug-postgres",
+  "version": "0.1.0",
+  "compiler": "0.22.0",
+  "source": "src",
+  "dependencies": {},
+  "native": {
+    "profile": "aug-native-abi-1",
+    "bindings": "native.abi.json",
+    "bindingsSha256": "1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea",
+    "upstream": {
+      "repository": "https://github.com/postgres/postgres",
+      "version": "18.6",
+      "sourceRevision": "555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f"
+    },
+    "artifacts": [
+      {
+        "id": "linux-arm64",
+        "target": {
+          "triple": "aarch64-unknown-linux-gnu",
+          "os": "linux",
+          "arch": "arm64",
+          "minimumLibc": "2.36",
+          "libc": "glibc",
+          "cpuBaseline": "armv8-a"
+        },
+        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-linux-arm64.tar.gz",
+        "sha256": "254988dec807ab761923084f884d16f95b808f1870bf120a3c6126151368fbb0",
+        "maximumDownloadBytes": 2849926,
+        "maximumUnpackedBytes": 6580205,
+        "link": {
+          "kind": "dynamic",
+          "libraries": [
+            "lib/libaug_postgres.so.1"
+          ]
+        },
+        "runtime": {
+          "files": [
+            "lib/libaug_postgres.so.1"
+          ],
+          "closureManifest": "runtime-files.json",
+          "relocation": "loader-relative"
+        },
+        "components": [
+          {
+            "id": "https://github.com/postgres/postgres",
+            "version": "18.6",
+            "compatibilityKey": "aug-postgres-libpq",
+            "linkage": "static",
+            "required": true
+          },
+          {
+            "id": "https://github.com/openssl/openssl",
+            "version": "3.5.9",
+            "compatibilityKey": "aug-postgres-tls",
+            "linkage": "static",
+            "required": true
+          }
+        ],
+        "fileManifest": "files.json",
+        "provenance": "provenance.json",
+        "notices": "THIRD_PARTY_NOTICES.md"
+      },
+      {
+        "id": "macos-arm64",
+        "target": {
+          "triple": "aarch64-apple-darwin",
+          "os": "macos",
+          "arch": "arm64",
+          "minimumOS": "14.0",
+          "libc": "libSystem",
+          "cpuBaseline": "armv8-a"
+        },
+        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-macos-arm64.tar.gz",
+        "sha256": "79fa69076e059d6e769caca14039f3ee4d16e6deaa57ed594b6c1ef3cacd5e65",
+        "maximumDownloadBytes": 2513127,
+        "maximumUnpackedBytes": 5294491,
+        "link": {
+          "kind": "dynamic",
+          "libraries": [
+            "lib/libaug_postgres.1.dylib"
+          ]
+        },
+        "runtime": {
+          "files": [
+            "lib/libaug_postgres.1.dylib"
+          ],
+          "closureManifest": "runtime-files.json",
+          "relocation": "loader-relative"
+        },
+        "components": [
+          {
+            "id": "https://github.com/postgres/postgres",
+            "version": "18.6",
+            "compatibilityKey": "aug-postgres-libpq",
+            "linkage": "static",
+            "required": true
+          },
+          {
+            "id": "https://github.com/openssl/openssl",
+            "version": "3.5.9",
+            "compatibilityKey": "aug-postgres-tls",
+            "linkage": "static",
+            "required": true
+          }
+        ],
+        "fileManifest": "files.json",
+        "provenance": "provenance.json",
+        "notices": "THIRD_PARTY_NOTICES.md"
+      }
+    ],
+    "sourceBuild": {
+      "recipe": "native/build.json",
+      "inputs": "native/sources.lock.json",
+      "tools": [
+        "Node 24",
+        "Clang, Make, Perl, Bison and Flex",
+        "macOS Apple SDK or pinned Debian 12 maintainer image"
+      ],
+      "automatic": false
+    }
+  }
+}

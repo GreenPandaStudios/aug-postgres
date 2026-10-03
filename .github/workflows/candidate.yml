@@ -1,0 +1,98 @@
+name: Build native candidate
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            target: macos-arm64
+            directory: native
+          - runner: ubuntu-24.04
+            target: linux-x64
+            directory: native-linux-x64
+          - runner: ubuntu-24.04-arm
+            target: linux-arm64
+            directory: native-linux-arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    env:
+      AUG_PACKAGE_SOURCE_REVISION: ${{ github.sha }}
+      AUG_GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Select the reviewed compiler sources
+        id: compiler
+        run: |
+          node --input-type=module <<'AUG_COMPILER'
+          import {readFileSync,appendFileSync} from 'node:fs';
+          const pin=JSON.parse(readFileSync('native/compiler-qualification.json'));
+          appendFileSync(process.env.GITHUB_OUTPUT,'repository='+pin.repository+'\nref='+pin.revision+'\n');
+          AUG_COMPILER
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          repository: ${{ steps.compiler.outputs.repository }}
+          ref: ${{ steps.compiler.outputs.ref }}
+          path: .aug-build/compiler
+          persist-credentials: false
+      - name: Prepare the source compiler on macOS
+        if: runner.os == 'macOS'
+        working-directory: .aug-build/compiler
+        run: |
+          npm ci
+          node scripts/bootstrap-native.mjs
+          node scripts/prepare-llvm-tools.mjs
+          node scripts/build-runtime-pack.mjs
+      - name: Check declarations, build and qualify the macOS candidate
+        if: runner.os == 'macOS'
+        env:
+          AUG_CLI: ${{ github.workspace }}/.aug-build/compiler/bin/aug.mjs
+          AUG_LLVM_HOME: ${{ github.workspace }}/.aug-build/compiler/.aug-build/llvm-tools
+          AUG_RUNTIME_PACK: ${{ github.workspace }}/.aug-build/compiler/.aug-native/llvm/runtime
+          AUG_NATIVE_HOME: ${{ github.workspace }}/.aug-build/compiler/.aug-native
+          AUG_REQUIRE_QUALIFIED_COMPILER: '1'
+        run: |
+          node "$AUG_CLI" bind header native/include/aug_postgres.h --contract native.abi.json --target aarch64-apple-darwin --clang clang --output .aug-build/header-check
+          node native/build.mjs
+          node native/ci-server.mjs
+      - name: Build and qualify the GNU/Linux candidate on Debian 12
+        if: runner.os == 'Linux'
+        run: |
+          docker build -f .aug-build/compiler/docker/Dockerfile.native-maintainer -t aug-postgres-maintainer .aug-build/compiler
+          docker run -d --env AUG_GITHUB_TOKEN --name candidate aug-postgres-maintainer sleep infinity
+          docker exec candidate node scripts/bootstrap-native.mjs
+          docker exec candidate node scripts/prepare-llvm-tools.mjs
+          docker exec candidate node scripts/build-runtime-pack.mjs
+          docker exec candidate mkdir -p /package
+          git archive HEAD | docker exec -i candidate tar -xf - -C /package
+          docker exec candidate chown -R node:node /package
+          docker exec candidate node bin/aug.mjs bind header /package/native/include/aug_postgres.h --contract /package/native.abi.json --target "$(case '${{ matrix.target }}' in linux-x64) echo x86_64-unknown-linux-gnu;; *) echo aarch64-unknown-linux-gnu;; esac)" --clang clang --output .aug-build/header-check-postgres
+          docker exec -u node -w /package -e AUG_PACKAGE_SOURCE_REVISION candidate node native/build.mjs
+          docker exec -u node -w /package -e AUG_PACKAGE_SOURCE_REVISION -e AUG_REQUIRE_QUALIFIED_COMPILER=1 -e AUG_CLI=/work/bin/aug.mjs -e AUG_LLVM_HOME=/work/.aug-build/llvm-tools -e AUG_RUNTIME_PACK=/work/.aug-native/llvm/runtime -e AUG_NATIVE_HOME=/work/.aug-native candidate node native/ci-server.mjs
+          docker cp candidate:/package/.aug-build/${{ matrix.directory }} .aug-build/${{ matrix.directory }}
+          docker cp candidate:/package/aug-package.json aug-package.json
+      - name: Verify build inputs before collecting the candidate
+        run: node native/verify-candidate.mjs .aug-build/${{ matrix.directory }}/candidate.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: native-candidate-${{ matrix.target }}
+          include-hidden-files: true
+          path: |
+            .aug-build/${{ matrix.directory }}/native-${{ matrix.target }}.tar.gz
+            .aug-build/${{ matrix.directory }}/candidate.json
+            .aug-build/${{ matrix.directory }}/qualification.json
+            aug-package.json
+          if-no-files-found: error

@@ -1,0 +1,2 @@
+# PostgreSQL binding contributors
+Keep native ownership, query bounds, SQLSTATE, cleanup deadlines and upstream versions explicit. Consumers use verified prebuilt artifacts; never execute a build recipe on installation. Update August declarations and native.abi.json together and regenerate specs. Qualify actual PostgreSQL, TLS, transactions, cancellation and cleanup on each advertised target. Credentials must stay out of diagnostics, artifacts and Git.

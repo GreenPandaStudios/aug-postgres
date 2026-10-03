@@ -1,0 +1,3 @@
+backend: llvm
+packages:
+  postgres: ".."

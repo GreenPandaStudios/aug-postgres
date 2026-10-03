@@ -1,0 +1,8 @@
+// aug-spec: "contracts.aug.md" explains this file. Read it before changes; refresh with aug spec.
+import Pool from bindings
+/** Client failures use negative codes. Server failures preserve SQLSTATE through sqlState. Messages omit connection strings, parameters and server text. */
+PostgresError(int code, string message) implements Error:
+    pass
+/** Permission to configure an explicitly bounded PostgreSQL pool. Construct this service inside the worker that will own the pool. */
+capability DatabaseStorage:
+    open(string configuration, int maximum, int connectMilliseconds, int cleanupMilliseconds) returns own Pool unless PostgresError uses DatabaseStorage.open
