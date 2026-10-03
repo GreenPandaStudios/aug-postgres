@@ -13,8 +13,7 @@ const run=(command,args,env=process.env)=>{const r=spawnSync(command,args,{cwd:r
 // exit-symbol test includes OpenSSL's registered process cleanup.
 run('make',['-j4','-C',join(build,'src/interfaces/libpq'),'all-lib']);
 run('make',['-j4','-C',join(build,'src/interfaces/libpq'),'-o','libpq-refs-stamp','install']);
-mkdirSync(join(prefix,'include/server/catalog'),{recursive:true});
-for(const directory of ['src/backend','src/include/catalog','src/backend/snowball','src/pl/plpgsql','src/bin/initdb','src/bin/pg_ctl','src/timezone'])run('make',['-j4','-C',join(build,directory),'-o','submake-libpq','install']);
+for(const directory of ['src/backend','src/include','src/backend/snowball','src/pl/plpgsql','src/bin/initdb','src/bin/pg_ctl','src/timezone'])run('make',['-j4','-C',join(build,directory),'-o','submake-libpq','install']);
 run('make',['-j4','-C',openssl,'apps/openssl']);
 const temporary=join(cache,'server');rmSync(temporary,{recursive:true,force:true});mkdirSync(temporary,{recursive:true});
 const password=join(temporary,'password'),cert=join(temporary,'server.crt'),key=join(temporary,'server.key'),config=join(temporary,'certificate.conf');
