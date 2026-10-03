@@ -26,9 +26,9 @@
           "cpuBaseline": "armv8-a"
         },
         "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-linux-arm64.tar.gz",
-        "sha256": "254988dec807ab761923084f884d16f95b808f1870bf120a3c6126151368fbb0",
-        "maximumDownloadBytes": 2849926,
-        "maximumUnpackedBytes": 6580205,
+        "sha256": "d8fc6a074ea77eadc023843846c833f93fb14fd07ba5a4c2fc183d3fc56fc1d0",
+        "maximumDownloadBytes": 2850031,
+        "maximumUnpackedBytes": 6580415,
         "link": {
           "kind": "dynamic",
           "libraries": [
@@ -73,9 +73,9 @@
           "cpuBaseline": "armv8-a"
         },
         "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-macos-arm64.tar.gz",
-        "sha256": "79fa69076e059d6e769caca14039f3ee4d16e6deaa57ed594b6c1ef3cacd5e65",
-        "maximumDownloadBytes": 2513127,
-        "maximumUnpackedBytes": 5294491,
+        "sha256": "49dc643f98e7999f722f4e492edff5c84fef95e40feda77e67bf3a7f0edac8b8",
+        "maximumDownloadBytes": 2513241,
+        "maximumUnpackedBytes": 5294701,
         "link": {
           "kind": "dynamic",
           "libraries": [
