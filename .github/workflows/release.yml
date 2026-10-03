@@ -33,26 +33,7 @@ jobs:
           ref: ${{ env.AUG_RELEASE_TAG }}
           path: release-source
           persist-credentials: false
-      - name: Select native publication profile
-        id: profile
-        working-directory: release-source
-        run: |
-          mkdir -p .aug-build
-          node --input-type=module <<'AUG_PROFILE'
-          import {readFileSync,appendFileSync} from 'node:fs';
-          const manifest=JSON.parse(readFileSync('aug-package.json'));
-          const prefix='/releases/download/v'+manifest.version+'/';
-          const reused=manifest.native.artifacts.every(a=>!new URL(a.url).pathname.includes(prefix));
-          appendFileSync(process.env.GITHUB_OUTPUT,'reused='+reused+'\n');
-          AUG_PROFILE
-      - name: Verify unchanged native inputs and publish the source compatibility release
-        if: steps.profile.outputs.reused == 'true'
-        working-directory: release-source
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: node ../scripts/publish-source-compatibility.mjs
       - name: Select reviewed candidate run
-        if: steps.profile.outputs.reused != 'true'
         id: candidate
         working-directory: release-source
         run: |
@@ -67,18 +48,15 @@ jobs:
           appendFileSync(process.env.GITHUB_OUTPUT,'run='+plan.runId+'\n');
           AUG_RUN
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
-        if: steps.profile.outputs.reused != 'true'
         with:
           run-id: ${{ steps.candidate.outputs.run }}
           github-token: ${{ github.token }}
           pattern: native-candidate-*
           path: release-source/.aug-build/reviewed
       - name: Verify source contracts and assemble exact archives
-        if: steps.profile.outputs.reused != 'true'
         working-directory: release-source
         run: node ../scripts/prepare-native-package-release.mjs .aug-build/reviewed
       - name: Publish only the verified archives
-        if: steps.profile.outputs.reused != 'true'
         working-directory: release-source
         env:
           GH_TOKEN: ${{ github.token }}

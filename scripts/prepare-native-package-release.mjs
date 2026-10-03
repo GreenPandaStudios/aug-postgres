@@ -5,6 +5,7 @@ import {copyFileSync,existsSync,mkdirSync,readFileSync,readdirSync,writeFileSync
 import {dirname,join,resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {verifyNativeCandidate} from './native-source-identity.mjs';
+import {verifyArchivedLibraryEvidence} from '../native/archive-library.mjs';
 
 export const nativeReleaseTargets=['linux-arm64','linux-x64','macos-arm64'];
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -29,6 +30,7 @@ export function verifyNativeReleaseDirectory(root,directory){
     verifyNativeCandidate({source:file.source,package:record.package,version:record.version},root);
     const bytes=readFileSync(join(directory,file.filename));
     assert.equal(bytes.length,artifact.maximumDownloadBytes);assert.equal(digest(bytes),artifact.sha256,'Staged archive differs from tagged pins');
+    verifyArchivedLibraryEvidence(join(directory,file.filename),artifact,file);
   }
   const checksums=filenames.map(filename=>record.files.find(file=>file.filename===filename).sha256+'  '+filename);
   checksums.push(digest(readFileSync(join(directory,'release.json')))+'  release.json');
@@ -62,6 +64,7 @@ export function prepareNativePackageRelease(root,input,output){
     assert.deepEqual(artifact,manifest.native.artifacts.find(a=>a.id===artifact.id),'Tagged manifest must pin the exact reviewed artifact');
     const qualification=JSON.parse(readFileSync(join(dirname(path),'qualification.json')));
     const compilerPin=JSON.parse(readFileSync(join(root,'native/compiler-qualification.json')));
+    assert.equal(qualification.status,'passed','A completed qualification report is required');
     assert.equal(qualification.llvmPassed,true,'Real LLVM worker and HTTP database qualification is required');
     assert.equal(qualification.compiler?.compiler,compilerPin.compiler,'LLVM qualification used a different compiler version');
     assert.equal(qualification.compiler?.sourceSha256,compilerPin.sourceSha256,'LLVM qualification used different compiler sources');
@@ -72,7 +75,8 @@ export function prepareNativePackageRelease(root,input,output){
     const archive=join(dirname(path),filename),bytes=readFileSync(archive);
     assert.equal(bytes.length,artifact.maximumDownloadBytes,'Candidate archive size differs');
     assert.equal(digest(bytes),artifact.sha256,'Candidate archive digest differs');
-    selected.set(artifact.id,{filename,archive,artifact,source:candidate.source});
+    const library=verifyArchivedLibraryEvidence(archive,artifact,qualification);
+    selected.set(artifact.id,{filename,archive,artifact,source:candidate.source,libraryPath:library.libraryPath,librarySha256:library.librarySha256});
   }
   assert.deepEqual([...selected.keys()].sort(),nativeReleaseTargets,'A required native candidate is missing');
   // No output is accepted until every candidate, source contract and archive passes.
@@ -80,7 +84,7 @@ export function prepareNativePackageRelease(root,input,output){
   const entries=[...selected.values()].sort((a,b)=>a.filename.localeCompare(b.filename));
   for(const item of entries)copyFileSync(item.archive,join(output,item.filename));
   const record={format:1,package:manifest.name,version:manifest.version,sourceRevision:plan.sourceRevision,runId:plan.runId,
-    files:entries.map(({filename,artifact,source})=>({filename,sha256:artifact.sha256,size:artifact.maximumDownloadBytes,target:artifact.target,source}))};
+    files:entries.map(({filename,artifact,source,libraryPath,librarySha256})=>({filename,sha256:artifact.sha256,size:artifact.maximumDownloadBytes,target:artifact.target,source,libraryPath,librarySha256}))};
   writeFileSync(join(output,'release.json'),JSON.stringify(record,null,2)+'\n');
   const checksums=entries.map(e=>e.artifact.sha256+'  '+e.filename);
   checksums.push(digest(readFileSync(join(output,'release.json')))+'  release.json');
