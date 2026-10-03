@@ -2,7 +2,7 @@
 
 An ordinary package for August 0.23.0 using PostgreSQL libpq 18.6 and OpenSSL 3.5.9. Pools, leases and results are owned native resources. One connection keeps a transaction, savepoints and advisory locks on its creating worker. Queries have explicit deadlines, row limits and copied-result byte limits. No package installation runs a build script.
 
-This repository is a release candidate. A retained August compiler/runtime release with the native cancellation probe and matching prebuilt package archives must be published before the following consumer commands are supported:
+[PostgreSQL v0.1.0](https://github.com/GreenPandaStudios/aug-postgres/releases/tag/v0.1.0) and [August 0.23.0](https://github.com/GreenPandaStudios/augscript/releases/tag/v0.23.0) are published previews. Prebuilt artifacts support macOS 14+ ARM64 and GNU/Linux ARM64 or x86-64 with glibc 2.36+. A [public Linux ARM64 cold install](https://greenpandastudios.github.io/augscript/qualification/0.23.0/native-ingestion-linux-arm64.json) compiled and exercised the package through LLVM without native development tools. Install the matching CLI, then add the package:
 
 ```sh
 aug add https://github.com/GreenPandaStudios/aug-postgres#v0.1.0 --as postgres
