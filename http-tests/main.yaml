@@ -1,4 +1,4 @@
 backend: llvm
 packages:
   postgres: ..
-  web: https://github.com/GreenPandaStudios/augscript/src/stdlib/web#v0.22.0
+  web: https://github.com/GreenPandaStudios/augscript/src/stdlib/web#v0.23.0

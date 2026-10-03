@@ -2,7 +2,7 @@
   "format": 2,
   "name": "@greenpandastudios/aug-postgres",
   "version": "0.1.0",
-  "compiler": "0.22.0",
+  "compiler": "0.23.0",
   "source": "src",
   "dependencies": {},
   "native": {

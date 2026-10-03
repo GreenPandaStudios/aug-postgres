@@ -1,6 +1,6 @@
 # August PostgreSQL
 
-An ordinary August package for PostgreSQL using libpq 18.6 and OpenSSL 3.5.9. Pools, leases and results are owned native resources. One connection keeps a transaction, savepoints and advisory locks on its creating worker. Queries have explicit deadlines, row limits and copied-result byte limits. No package installation runs a build script.
+An ordinary package for August 0.23.0 using PostgreSQL libpq 18.6 and OpenSSL 3.5.9. Pools, leases and results are owned native resources. One connection keeps a transaction, savepoints and advisory locks on its creating worker. Queries have explicit deadlines, row limits and copied-result byte limits. No package installation runs a build script.
 
 This repository is a release candidate. A retained August compiler/runtime release with the native cancellation probe and matching prebuilt package archives must be published before the following consumer commands are supported:
 
