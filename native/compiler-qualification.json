@@ -1,7 +1,7 @@
 {
   "format": 1,
   "repository": "GreenPandaStudios/augscript",
-  "revision": "c47626dc75f3822cc78391b1e7697f87022ae2b9",
-  "compiler": "0.23.0",
-  "sourceSha256": "67f98b5659ee50bed62fa4a6302113f3cc88a6fe7be3403da520cd3094c75b73"
+  "revision": "7f5357813b6f84848c358a1d8846a1a08b2c0608",
+  "compiler": "1.0.0",
+  "sourceSha256": "81fd887dbed9684b843bc796beca6b94031449016cdc5c4fbfd07e86cf094a0a"
 }

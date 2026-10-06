@@ -2,11 +2,15 @@
 
 # `main.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=5d7cba7e4d98a52771b7edb7e2e09e22453dbbd93b344e7106606d897a6dd74a -->
+
+[Interactions and sequences](main.aug.diagrams.md)
+
 ## Startup
 
-It sets `configuration` to the item at index `0` in `arguments`. Within a task and ownership scope, it sets `work` to a worker task running [`exercise`](operations.aug.md#symbol-exercise) with `configuration` with copies of its inputs on a separate heap; then it prints the result of waiting for `work`; propagate failures. On leaving this scope, join its child tasks and release its local values.
+It sets `configuration` to the item at index `0` in `arguments`. Within a task and ownership scope, it sets `work` to a worker task running [`exercise`](operations.aug.md#symbol-exercise) with `configuration` with copies of its inputs on a separate heap; then it prints the result of waiting for `work`; propagate failures. On leaving this scope, join its child tasks and release its local values. [source](main.aug#L4-L18)
 
-Within a task and ownership scope, it sets `sleeping` to a worker task running [`blocked`](cancellation.aug.md#symbol-blocked) with `configuration` with copies of its inputs on a separate heap; then it sets `failing` to a worker task running [`failAfterAdmission`](cancellation.aug.md#symbol-failAfterAdmission) with `configuration` with copies of its inputs on a separate heap; then it evaluates the result of waiting for `failing` and `sleeping` in input order; propagate failures. On leaving this scope, join its child tasks and release its local values. If this work raises `FileError`, it prints `"PostgreSQL worker cancellation passed"`. If this work raises `Error`, it prints `"PostgreSQL qualification failed"`; then it calls `exit` with `status` `1`.
+Within a task and ownership scope, it sets `sleeping` to a worker task running [`blocked`](cancellation.aug.md#symbol-blocked) with `configuration` with copies of its inputs on a separate heap; then it sets `failing` to a worker task running [`failAfterAdmission`](cancellation.aug.md#symbol-failAfterAdmission) with `configuration` with copies of its inputs on a separate heap; then it evaluates the result of waiting for `failing` and `sleeping` in input order; propagate failures. On leaving this scope, join its child tasks and release its local values. If this work raises `FileError`, it prints `"PostgreSQL worker cancellation passed"`. If this work raises `Error`, it prints `"PostgreSQL qualification failed"`; then it calls `exit` with `status` `1`. [source](main.aug#L4-L18)
 
 ## Dependencies
 
