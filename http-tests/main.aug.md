@@ -2,20 +2,24 @@
 
 # `main.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=16f958a9368b379038073d63c411001a8a1e352492e0f0bd6fc41e6572042275 -->
+
+[Interactions and sequences](main.aug.diagrams.md)
+
 ## HTTP configuration
 
 Listen on `127.0.0.1`. Limit request bodies to 1048576 bytes and buffered responses to 4194304 bytes.
 
 ## Providers
 
-`ServerControl` is provided by [`WebServerControl`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-WebServerControl). The same instance is shared.
+`ServerControl` is provided by [`WebServerControl`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-WebServerControl). The same instance is shared.
 
 ## Startup
 
-It serves [`slow`](routes.aug.md#symbol-slow) and [`stop`](routes.aug.md#symbol-stop) on port `0`. It prints `"database HTTP drained"`.
+It serves [`slow`](routes.aug.md#symbol-slow) and [`stop`](routes.aug.md#symbol-stop) on port `0`. It prints `"database HTTP drained"`. [source](main.aug#L5-L6)
 
 ## Dependencies
 
-It uses [`WebServerControl`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-WebServerControl) from `web`. It uses [`slow`](routes.aug.md#symbol-slow) and [`stop`](routes.aug.md#symbol-stop) from `routes`.
+It uses [`WebServerControl`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-WebServerControl) from `web`. It uses [`slow`](routes.aug.md#symbol-slow) and [`stop`](routes.aug.md#symbol-stop) from `routes`.
 
 Built-in operations follow the [language reference](https://greenpandastudios.github.io/augscript/language-constructs).

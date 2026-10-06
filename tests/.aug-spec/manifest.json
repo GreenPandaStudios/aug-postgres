@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "files": [
+    ".aug-spec/diagrams/index.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json",
+    "cancellation.aug.diagrams.md",
+    "cancellation.aug.md",
+    "main.aug.diagrams.md",
+    "main.aug.md",
+    "operations.aug.diagrams.md",
+    "operations.aug.md"
+  ],
+  "nativeDescriptors": {
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json": "1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea"
+  },
+  "digest": "88484f0ab554c6f3d5b55f7688ef4bc4f77d3c869e38c183c8e6a95b9f536e93"
+}

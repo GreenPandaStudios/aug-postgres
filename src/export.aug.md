@@ -2,6 +2,10 @@
 
 # `export.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=5c16189c60bafab8a80f5f4028a07349ceae570a2e96dc21b58fbdbe45813db9 -->
+
+[Interactions and sequences](export.aug.diagrams.md)
+
 ## Exports
 
 Export the declaration `Pool` from [`bindings.aug`](bindings.aug.md#symbol-Pool). Export the declaration `Connection` from [`bindings.aug`](bindings.aug.md#symbol-Connection). Export the declaration `Result` from [`bindings.aug`](bindings.aug.md#symbol-Result). Export the declaration `PostgresError` from [`contracts.aug`](contracts.aug.md#symbol-PostgresError).

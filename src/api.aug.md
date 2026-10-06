@@ -2,6 +2,10 @@
 
 # `api.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=57df5ae432fe98f1a68c9a6a86246f8abd8106ae2192a6fc62176c2bf9229f79 -->
+
+[Interactions and sequences](api.aug.diagrams.md)
+
 <a id="symbol-NativeDatabaseStorage"></a>
 ## `NativeDatabaseStorage` · class · [source](api.aug#L12)
 
@@ -10,71 +14,145 @@ Configure a pool without connecting. Acquire opens or reuses a session on this O
 <a id="symbol-NativeDatabaseStorage.open"></a>
 ### `NativeDatabaseStorage.open` · [source](api.aug#L13)
 
+It takes labeled inputs `configuration`, `maximum`, `connectMilliseconds`, and `cleanupMilliseconds`. Within an unsafe block, it returns [`_pool`](api.aug.md#symbol-_pool) with `configuration`, `maximum`, `connectMilliseconds`, and `cleanupMilliseconds`. Native operations must satisfy their declared C contracts. [source](api.aug#L14-L15)
+
+<details>
+<summary>Checked interface</summary>
+
+```text
+open(string configuration, int maximum, int connectMilliseconds, int cleanupMilliseconds) returns own Pool unless PostgresError uses DatabaseStorage.open
+```
+
 It takes `configuration` as a string and `maximum`, `connectMilliseconds`, and `cleanupMilliseconds` as integers. It returns ownership of [`Pool`](bindings.aug.md#symbol-Pool). Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Within an unsafe block, it returns [`_pool`](api.aug.md#symbol-_pool) with `configuration`, `maximum`, `connectMilliseconds`, and `cleanupMilliseconds`. Native operations must satisfy their declared C contracts.
+</details>
 
 <a id="symbol-acquire"></a>
 ## `acquire` · [source](api.aug#L17)
 
 Lease one session. Full pools fail immediately with code -4; there is no unbounded waiter queue. Release returns an idle session or rolls back an unfinished transaction within the cleanup deadline. It takes `pool` as [`Pool`](bindings.aug.md#symbol-Pool) with permission to mutate it during the call.
 
-It returns ownership of [`Connection`](bindings.aug.md#symbol-Connection). It may change `pool`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+Within an unsafe block, it returns [`_acquire`](api.aug.md#symbol-_acquire) with `pool`. Native operations must satisfy their declared C contracts. [source](api.aug#L18-L19)
 
-Within an unsafe block, it returns [`_acquire`](api.aug.md#symbol-_acquire) with `pool`. Native operations must satisfy their declared C contracts.
+<details>
+<summary>Checked interface</summary>
+
+```text
+acquire(borrow Pool pool) returns own Connection unless PostgresError changes pool
+```
+
+It takes `pool` as [`Pool`](bindings.aug.md#symbol-Pool) with permission to mutate it during the call. It returns ownership of [`Connection`](bindings.aug.md#symbol-Connection). It may change `pool`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 <a id="symbol-query"></a>
 ## `query` · [source](api.aug#L21)
 
 Execute one labeled, parameterized statement. Use $1, $2 and explicit PostgreSQL casts. Parameters are text; encode bytea as \x plus Bytes.hex(). BEGIN, SAVEPOINT and advisory locks use this same leased connection. Copied results obey maximumRows and maximumBytes. The timeout and cancellation discard the session after bounded cancellation dispatch.
 
+It takes labeled inputs `connection`, `sql`, `parameters`, `milliseconds`, `maximumRows`, and `maximumBytes`. It takes `connection` as [`Connection`](bindings.aug.md#symbol-Connection) with permission to mutate it during the call. Within an unsafe block, it returns [`_query`](api.aug.md#symbol-_query) with `connection`, `sql`, `parameters`, `milliseconds`, `maximumRows`, and `maximumBytes`. Native operations must satisfy their declared C contracts. [source](api.aug#L22-L23)
+
+<details>
+<summary>Checked interface</summary>
+
+```text
+query(borrow Connection connection, string sql, List<string> parameters, int milliseconds, int maximumRows, int maximumBytes) returns own Result unless PostgresError changes connection
+```
+
 It takes `connection` as [`Connection`](bindings.aug.md#symbol-Connection) with permission to mutate it during the call, `sql` as a string, `parameters` as `List<string>`, and `milliseconds`, `maximumRows`, and `maximumBytes` as integers. It returns ownership of [`Result`](bindings.aug.md#symbol-Result). It may change `connection`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Within an unsafe block, it returns [`_query`](api.aug.md#symbol-_query) with `connection`, `sql`, `parameters`, `milliseconds`, `maximumRows`, and `maximumBytes`. Native operations must satisfy their declared C contracts.
+</details>
 
 <a id="symbol-rows"></a>
 ## `rows` · [source](api.aug#L25)
 
-Number of copied rows. It takes `result` as [`Result`](bindings.aug.md#symbol-Result). Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+Number of copied rows. It takes `result` as [`Result`](bindings.aug.md#symbol-Result). Within an unsafe block, it returns [`_rows`](api.aug.md#symbol-_rows) with `result`. Native operations must satisfy their declared C contracts. [source](api.aug#L26-L27)
 
-Within an unsafe block, it returns [`_rows`](api.aug.md#symbol-_rows) with `result`. Native operations must satisfy their declared C contracts.
+<details>
+<summary>Checked interface</summary>
+
+```text
+rows(Result result) returns int unless PostgresError
+```
+
+It takes `result` as [`Result`](bindings.aug.md#symbol-Result). Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 <a id="symbol-isNull"></a>
 ## `isNull` · [source](api.aug#L29)
 
-Distinguish SQL NULL from an empty string or buffer. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+Distinguish SQL NULL from an empty string or buffer. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Within an unsafe block, it returns [`_isNull`](api.aug.md#symbol-_isNull) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts. [source](api.aug#L30-L31)
 
-Within an unsafe block, it returns [`_isNull`](api.aug.md#symbol-_isNull) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts.
+<details>
+<summary>Checked interface</summary>
+
+```text
+isNull(Result result, int row, int column) returns bool unless PostgresError
+```
+
+It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 <a id="symbol-text"></a>
 ## `text` · [source](api.aug#L33)
 
-Copy a non-null column in PostgreSQL UTF-8 text form. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+Copy a non-null column in PostgreSQL UTF-8 text form. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Within an unsafe block, it returns [`_text`](api.aug.md#symbol-_text) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts. [source](api.aug#L34-L35)
 
-Within an unsafe block, it returns [`_text`](api.aug.md#symbol-_text) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts.
+<details>
+<summary>Checked interface</summary>
+
+```text
+text(Result result, int row, int column) returns string unless PostgresError
+```
+
+It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 <a id="symbol-bytes"></a>
 ## `bytes` · [source](api.aug#L37)
 
-Copy a non-null bytea column, including embedded zero bytes. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+Copy a non-null bytea column, including embedded zero bytes. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Within an unsafe block, it returns [`_bytes`](api.aug.md#symbol-_bytes) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts. [source](api.aug#L38-L39)
 
-Within an unsafe block, it returns [`_bytes`](api.aug.md#symbol-_bytes) with `result`, `row`, and `column`. Native operations must satisfy their declared C contracts.
+<details>
+<summary>Checked interface</summary>
+
+```text
+bytes(Result result, int row, int column) returns Bytes unless PostgresError
+```
+
+It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 <a id="symbol-sqlState"></a>
 ## `sqlState` · [source](api.aug#L41)
 
-Decode the exact five-character server SQLSTATE. Client errors return an empty string. It takes `error` as [`PostgresError`](contracts.aug.md#symbol-PostgresError). Failures can raise `IndexError`.
+Decode the exact five-character server SQLSTATE. Client errors return an empty string. It takes `error` as [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-If `error.code` is at most `0` or `error.code` is greater than `60466176`, it returns `""`. It sets `alphabet` to a list containing `"0"`, `"1"`, `"2"`, `"3"`, `"4"`, `"5"`, `"6"`, `"7"`, `"8"`, `"9"`, `"A"`, `"B"`, `"C"`, `"D"`, `"E"`, `"F"`, `"G"`, `"H"`, `"I"`, `"J"`, `"K"`, `"L"`, `"M"`, `"N"`, `"O"`, `"P"`, `"Q"`, `"R"`, `"S"`, `"T"`, `"U"`, `"V"`, `"W"`, `"X"`, `"Y"`, `"Z"`. It sets `value` to `error.code` minus `1`. It sets `state` to `""`.
+If `error.code` is at most `0` or `error.code` is greater than `60466176`, it returns `""`. It sets `alphabet` to a list containing `"0"`, `"1"`, `"2"`, `"3"`, `"4"`, `"5"`, `"6"`, `"7"`, `"8"`, `"9"`, `"A"`, `"B"`, `"C"`, `"D"`, `"E"`, `"F"`, `"G"`, `"H"`, `"I"`, `"J"`, `"K"`, `"L"`, `"M"`, `"N"`, `"O"`, `"P"`, `"Q"`, `"R"`, `"S"`, `"T"`, `"U"`, `"V"`, `"W"`, `"X"`, `"Y"`, `"Z"`. It sets `value` to `error.code` minus `1`. It sets `state` to `""`. [source](api.aug#L42-L46)
 
-For each `index` in a snapshot of a list containing `0`, `1`, `2`, `3`, `4`, it builds `state` as the text `{the item at index value minus ((value divided by 36) times 36) in alphabet}{state}`; then it sets `value` to `value` divided by `36`. After the loop, it returns `state`.
+For each `index` in a snapshot of a list containing `0`, `1`, `2`, `3`, `4`, it builds `state` as the text `{the item at index value minus ((value divided by 36) times 36) in alphabet}{state}`; then it sets `value` to `value` divided by `36`. After the loop, it returns `state`. [source](api.aug#L47-L50)
+
+<details>
+<summary>Checked interface</summary>
+
+```text
+sqlState(PostgresError error) returns string unless IndexError
+```
+
+It takes `error` as [`PostgresError`](contracts.aug.md#symbol-PostgresError). Failures can raise `IndexError`.
+
+</details>
 
 <a id="symbol-_pool"></a>
 ## `_pool` · [source](api.aug#L4)
 
 It is private to its defining scope. It takes `configuration` as a string and `maximum`, `connectMilliseconds`, and `cleanupMilliseconds` as integers. It returns ownership of [`Pool`](bindings.aug.md#symbol-Pool). Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_pool_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_pool_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_acquire"></a>
 ## `_acquire` · [source](api.aug#L5)
@@ -83,7 +161,7 @@ It is private to its defining scope. It takes `pool` as [`Pool`](bindings.aug.md
 
 It returns ownership of [`Connection`](bindings.aug.md#symbol-Connection). It may change `pool`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_acquire_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `pool` lends mutable access for this call. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_acquire_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `pool` lends mutable access for this call. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_query"></a>
 ## `_query` · [source](api.aug#L6)
@@ -92,35 +170,35 @@ It is private to its defining scope. It takes `connection` as [`Connection`](bin
 
 It returns ownership of [`Result`](bindings.aug.md#symbol-Result). It may change `connection`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_query_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `connection` lends mutable access for this call. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_query_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `connection` lends mutable access for this call. The caller owns the returned handle. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_rows"></a>
 ## `_rows` · [source](api.aug#L7)
 
 It is private to its defining scope. It takes `result` as [`Result`](bindings.aug.md#symbol-Result). It returns `int`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_rows_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_rows_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_isNull"></a>
 ## `_isNull` · [source](api.aug#L8)
 
 It is private to its defining scope. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. It returns `bool`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_null_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_null_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_text"></a>
 ## `_text` · [source](api.aug#L9)
 
 It is private to its defining scope. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. It returns `string`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_text_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. August copies the returned buffer, then calls `aug_postgres_buffer_release_v1` to release it. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_text_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. August copies the returned buffer, then calls `aug_postgres_buffer_release_v1` to release it. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 <a id="symbol-_bytes"></a>
 ## `_bytes` · [source](api.aug#L10)
 
 It is private to its defining scope. It takes `result` as [`Result`](bindings.aug.md#symbol-Result) and `row` and `column` as integers. It returns `Bytes`. Failures can raise [`PostgresError`](contracts.aug.md#symbol-PostgresError).
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_bytes_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. August copies the returned buffer, then calls `aug_postgres_buffer_release_v1` to release it. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). It calls `aug_postgres_bytes_v1` through the C ABI on the caller thread; a blocking native call blocks that thread. `result` lends read access for this call. August copies the returned buffer, then calls `aug_postgres_buffer_release_v1` to release it. Its maintainer permits independent instances on worker threads. The compiler checks the provider, descriptor digest, signature and ownership at August call sites. The native author promises not to retain inputs, enter August from foreign threads, or unwind across the C boundary; internal native workers may run. The compiler does not prove those promises.
 
 ## Dependencies
 

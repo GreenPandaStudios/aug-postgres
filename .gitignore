@@ -3,7 +3,7 @@
 .aug-native/
 node_modules/
 aug.lock.json
-.aug-spec/
 .aug-packages/
 .aug-install-*/
 .aug-packages-old/
+.aug-changes/

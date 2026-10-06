@@ -2,17 +2,21 @@
 
 # `bindings.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=ab9166b42870728363207b34e266661bb648ce2bb4e9daad06e6f5ceb024db16 -->
+
+[Interactions and sequences](bindings.aug.diagrams.md)
+
 <a id="symbol-Pool"></a>
 ## `Pool` · native resource · [source](bindings.aug#L2)
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_pool_release_v1` when its scope ends, including error and return paths.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_pool_release_v1` when its scope ends, including error and return paths.
 
 <a id="symbol-Connection"></a>
 ## `Connection` · native resource · [source](bindings.aug#L3)
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_connection_release_v1` when its scope ends, including error and return paths.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_connection_release_v1` when its scope ends, including error and return paths.
 
 <a id="symbol-Result"></a>
 ## `Result` · native resource · [source](bindings.aug#L4)
 
-Native implementation: `@greenpandastudios/aug-postgres@0.1.0`, `18.6`. Supported targets: macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_result_release_v1` when its scope ends, including error and return paths.
+Native implementation: `@greenpandastudios/aug-postgres@0.2.0`, `18.6`. Supported targets: linux arm64 glibc 2.36+, linux x64 glibc 2.36+, macos arm64 14.0+. Binding contract: [`native.abi.json`](../.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/native.abi.json) (SHA-256 `1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea`). An owned value releases its opaque handle through `aug_postgres_result_release_v1` when its scope ends, including error and return paths.

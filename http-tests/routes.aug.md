@@ -2,24 +2,48 @@
 
 # `routes.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=9967b0df4dfd41db53f4f7ed36c29ea549b3d7e52edca8f04fee7fce04a5fb79 -->
+
+[Interactions and sequences](routes.aug.diagrams.md)
+
 Plain handler results default to HTTP 200 unless another status is declared. HttpResponse values choose their own status. Unhandled request failures return HTTP 500 and cancel the request tasks.
 
 <a id="symbol-slow"></a>
 ## `slow` · [source](routes.aug#L5)
 
-`slow` handles `POST /slow`. A disposable qualification endpoint; the body holds synthetic test configuration. It takes `request` as `HttpRequest` from the HTTP request. It can also raise `ConcurrencyError`, `ConversionError`, `HttpError`, and `PostgresError`.
+`slow` handles `POST /slow`. A disposable qualification endpoint; the body holds synthetic test configuration. It takes `request` as `HttpRequest` from the HTTP request.
 
-It sets `configuration` to `request.body.text`. Within a task and ownership scope, it sets `pending` to a worker task running [`block`](work.aug.md#symbol-block) with `configuration` with copies of its inputs on a separate heap; then it evaluates the result of waiting for `pending`; propagate failures. On leaving this scope, join its child tasks and release its local values. It returns `"finished"`.
+It sets `configuration` to `request.body.text`. Within a task and ownership scope, it sets `pending` to a worker task running [`block`](work.aug.md#symbol-block) with `configuration` with copies of its inputs on a separate heap; then it evaluates the result of waiting for `pending`; propagate failures. On leaving this scope, join its child tasks and release its local values. It returns `"finished"`. [source](routes.aug#L6-L10)
+
+<details>
+<summary>Checked interface</summary>
+
+```text
+slow(HttpRequest request) returns string unless ConcurrencyError and ConversionError and HttpError and PostgresError uses DatabaseStorage.open
+```
+
+It takes `request` as `HttpRequest` from the HTTP request. It can also raise `ConcurrencyError`, `ConversionError`, `HttpError`, and `PostgresError`.
+
+</details>
 
 <a id="symbol-stop"></a>
 ## `stop` · [source](routes.aug#L11)
 
-`stop` handles `POST /stop`. It gets `control` ([`ServerControl`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-ServerControl)) from dependency injection. It can also raise `HttpError`.
+`stop` handles `POST /stop`. It gets `control` ([`ServerControl`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-ServerControl)) from dependency injection. It passes `100` to [`control.stop`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-ServerControl.stop). It returns `"stopping"`. [source](routes.aug#L12-L13)
 
-It passes `100` to [`control.stop`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-ServerControl.stop). It returns `"stopping"`.
+<details>
+<summary>Checked interface</summary>
+
+```text
+stop(resolve ServerControl control) returns string unless HttpError uses ServerControl.stop
+```
+
+It gets `control` ([`ServerControl`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-ServerControl)) from dependency injection. It can also raise `HttpError`.
+
+</details>
 
 ## Dependencies
 
-It uses [`ServerControl`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-ServerControl) ([`stop`](.aug-spec/packages/%40git/url_9eb7e05045add9337c76/0.0.0/contracts.aug.md#symbol-ServerControl.stop)) from `web`. It uses [`DatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-DatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-DatabaseStorage.open)) and [`PostgresError`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-PostgresError). It uses [`block`](work.aug.md#symbol-block) from `work`.
+It uses [`ServerControl`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-ServerControl) ([`stop`](.aug-spec/packages/%40git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md#symbol-ServerControl.stop)) from `web`. It uses [`DatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-DatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-DatabaseStorage.open)) and [`PostgresError`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-PostgresError). It uses [`block`](work.aug.md#symbol-block) from `work`.
 
 Built-in operations follow the [language reference](https://greenpandastudios.github.io/augscript/language-constructs).

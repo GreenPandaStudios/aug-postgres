@@ -2,6 +2,10 @@
 
 # `contracts.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=a81f4082e6af35340819082dcec3608f6c2e476e0de02784182535f26d19da8e -->
+
+[Interactions and sequences](contracts.aug.diagrams.md)
+
 <a id="symbol-PostgresError"></a>
 ## `PostgresError` · class · [source](contracts.aug#L4)
 

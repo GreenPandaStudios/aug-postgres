@@ -1,0 +1,29 @@
+{
+  "format": 1,
+  "files": [
+    ".aug-spec/diagrams/index.md",
+    ".aug-spec/packages/@git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug",
+    ".aug-spec/packages/@git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.diagrams.md",
+    ".aug-spec/packages/@git/url_897efafd565158fc4908/0.0.0-git.7f5357813b6f84848c358a1d8846a1a08b2c0608/contracts.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/api.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/bindings.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug.diagrams.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/contracts.aug.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json",
+    "main.aug.diagrams.md",
+    "main.aug.md",
+    "routes.aug.diagrams.md",
+    "routes.aug.md",
+    "work.aug.diagrams.md",
+    "work.aug.md"
+  ],
+  "nativeDescriptors": {
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json": "1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea"
+  },
+  "digest": "bf98b48824c96bfeea4c31479e8aaeb01a73e3c67b51069a0dbf8d20c57ac23f"
+}

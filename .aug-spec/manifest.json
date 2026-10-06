@@ -1,0 +1,20 @@
+{
+  "format": 1,
+  "files": [
+    ".aug-spec/diagrams/folders/src/index.md",
+    ".aug-spec/diagrams/index.md",
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json",
+    "src/api.aug.diagrams.md",
+    "src/api.aug.md",
+    "src/bindings.aug.diagrams.md",
+    "src/bindings.aug.md",
+    "src/contracts.aug.diagrams.md",
+    "src/contracts.aug.md",
+    "src/export.aug.diagrams.md",
+    "src/export.aug.md"
+  ],
+  "nativeDescriptors": {
+    ".aug-spec/packages/@greenpandastudios/aug-postgres/0.2.0/native.abi.json": "1d8514d82ea59da8a178a720f859de9478e3099c7bb8485979f40278582bf3ea"
+  },
+  "digest": "46f77dcca8068d91fdb541be61ef451bbaaab8aa9bced21afaa678b6ba18f768"
+}
