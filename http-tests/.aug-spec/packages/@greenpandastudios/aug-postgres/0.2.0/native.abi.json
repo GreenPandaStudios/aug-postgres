@@ -1,0 +1,254 @@
+{
+  "format": 1,
+  "profile": "aug-native-abi-1",
+  "resources": [
+    {
+      "module": "bindings",
+      "name": "Pool",
+      "release": "aug_postgres_pool_release_v1"
+    },
+    {
+      "module": "bindings",
+      "name": "Connection",
+      "release": "aug_postgres_connection_release_v1"
+    },
+    {
+      "module": "bindings",
+      "name": "Result",
+      "release": "aug_postgres_result_release_v1"
+    }
+  ],
+  "functions": [
+    {
+      "module": "api",
+      "name": "_pool",
+      "symbol": "aug_postgres_pool_v1",
+      "params": [
+        {
+          "name": "configuration",
+          "kind": "utf8"
+        },
+        {
+          "name": "maximum",
+          "kind": "i64"
+        },
+        {
+          "name": "connectMilliseconds",
+          "kind": "i64"
+        },
+        {
+          "name": "cleanupMilliseconds",
+          "kind": "i64"
+        }
+      ],
+      "result": {
+        "kind": "resource",
+        "resource": "bindings.Pool"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_acquire",
+      "symbol": "aug_postgres_acquire_v1",
+      "params": [
+        {
+          "name": "pool",
+          "kind": "resource",
+          "resource": "bindings.Pool",
+          "ownership": "borrow"
+        }
+      ],
+      "result": {
+        "kind": "resource",
+        "resource": "bindings.Connection"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [
+        "pool"
+      ],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_query",
+      "symbol": "aug_postgres_query_v1",
+      "params": [
+        {
+          "name": "connection",
+          "kind": "resource",
+          "resource": "bindings.Connection",
+          "ownership": "borrow"
+        },
+        {
+          "name": "sql",
+          "kind": "utf8"
+        },
+        {
+          "name": "parameters",
+          "kind": "utf8-list"
+        },
+        {
+          "name": "milliseconds",
+          "kind": "i64"
+        },
+        {
+          "name": "maximumRows",
+          "kind": "i64"
+        },
+        {
+          "name": "maximumBytes",
+          "kind": "i64"
+        }
+      ],
+      "result": {
+        "kind": "resource",
+        "resource": "bindings.Result"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [
+        "connection"
+      ],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_rows",
+      "symbol": "aug_postgres_rows_v1",
+      "params": [
+        {
+          "name": "result",
+          "kind": "resource",
+          "resource": "bindings.Result",
+          "ownership": "read"
+        }
+      ],
+      "result": {
+        "kind": "i64"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_isNull",
+      "symbol": "aug_postgres_null_v1",
+      "params": [
+        {
+          "name": "result",
+          "kind": "resource",
+          "resource": "bindings.Result",
+          "ownership": "read"
+        },
+        {
+          "name": "row",
+          "kind": "i64"
+        },
+        {
+          "name": "column",
+          "kind": "i64"
+        }
+      ],
+      "result": {
+        "kind": "bool"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_text",
+      "symbol": "aug_postgres_text_v1",
+      "params": [
+        {
+          "name": "result",
+          "kind": "resource",
+          "resource": "bindings.Result",
+          "ownership": "read"
+        },
+        {
+          "name": "row",
+          "kind": "i64"
+        },
+        {
+          "name": "column",
+          "kind": "i64"
+        }
+      ],
+      "result": {
+        "kind": "utf8",
+        "release": "aug_postgres_buffer_release_v1"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    },
+    {
+      "module": "api",
+      "name": "_bytes",
+      "symbol": "aug_postgres_bytes_v1",
+      "params": [
+        {
+          "name": "result",
+          "kind": "resource",
+          "resource": "bindings.Result",
+          "ownership": "read"
+        },
+        {
+          "name": "row",
+          "kind": "i64"
+        },
+        {
+          "name": "column",
+          "kind": "i64"
+        }
+      ],
+      "result": {
+        "kind": "bytes",
+        "release": "aug_postgres_buffer_release_v1"
+      },
+      "error": "contracts.PostgresError",
+      "callingConvention": "C",
+      "status": "i32",
+      "uses": [],
+      "changes": [],
+      "thread": "caller",
+      "retainsInputs": false,
+      "workerSafe": true
+    }
+  ]
+}
