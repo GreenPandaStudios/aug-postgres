@@ -26,3 +26,5 @@ Run `node native/build.mjs` followed by `node native/ci-server.mjs` in a support
 MIT adapter; PostgreSQL License and Apache-2.0 upstream notices are included in each native archive.
 
 For retained pull-request candidates, `release-candidates.json` records both `workflowHeadRevision` and the actual merge-checkout `sourceRevision`. Publication verifies the successful workflow head and the checkout's exact base/head parents, then rechecks the archived source, compiler and library identities. An unrelated workflow or stale checkout cannot authorize publication.
+
+After a pull request is merged, GitHub may clear the completed run’s pull-request list. Publication then reads the official commit-to-pull-request association for the exact workflow head. It still requires one merged request in this repository, the recorded base, and the checkout’s exact base/workflow-head parents; missing or ambiguous associations fail.

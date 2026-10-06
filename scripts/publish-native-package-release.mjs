@@ -7,7 +7,7 @@ import {tmpdir} from 'node:os';
 import {join,resolve} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {verifyNativeReleaseDirectory} from './prepare-native-package-release.mjs';
-import {verifyCandidateWorkflow} from './candidate-workflow.mjs';
+import {verifyCandidateWorkflow,readAssociatedRequests} from './candidate-workflow.mjs';
 
 const root=process.cwd();
 const manifest=JSON.parse(readFileSync(join(root,'aug-package.json')));
@@ -22,7 +22,9 @@ const gh=args=>{const result=spawnSync('gh',args,{encoding:'utf8',cwd:root});
   assert.equal(result.status,0,result.stderr||result.error?.message||'GitHub command failed');return result.stdout;};
 const run=JSON.parse(gh(['api',`repos/${repository}/actions/runs/${plan.runId}`]));
 const checkout=JSON.parse(gh(['api',`repos/${repository}/commits/${plan.sourceRevision}`]));
-verifyCandidateWorkflow(run,plan,repository,checkout);
+const associatedRequests=run.event==='pull_request'&&run.pull_requests?.length===0
+  ?readAssociatedRequests(gh,repository,plan.workflowHeadRevision):[];
+verifyCandidateWorkflow(run,plan,repository,checkout,associatedRequests);
 const directory=resolve(process.argv[2]??join(root,'.aug-build/release'));
 const files=readdirSync(directory).sort();
 assert.deepEqual(files,['SHA256SUMS','native-linux-arm64.tar.gz','native-linux-x64.tar.gz','native-macos-arm64.tar.gz','release.json']);
