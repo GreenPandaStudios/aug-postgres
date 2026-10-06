@@ -2,13 +2,28 @@
 
 # `work.aug`
 
+<!-- August spec revision: schema=1 compiler=1.0.0 source-sha256=0e375e3151c05573b425996d4028cedbf357fbc27ec7e54d1259f1c393d4da0f -->
+
+[Interactions and sequences](work.aug.diagrams.md)
+
 <a id="symbol-block"></a>
 ## `block` · [source](work.aug#L4)
 
-Resources are created and disposed on the worker; HTTP remains on its event loop. It takes `configuration` as a string. Failures can raise `PostgresError`.
+Resources are created and disposed on the worker; HTTP remains on its event loop. It takes `configuration` as a string.
 
-It sets `storage` to a [`NativeDatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-NativeDatabaseStorage). It calls [`storage.open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-NativeDatabaseStorage.open) with `configuration` from the text `{configuration} application_name=aug-qualification-http`, `maximum` `1`, `connectMilliseconds` `2000`, and `cleanupMilliseconds` `100` and stores the result in owned `pool` ([`Pool`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Pool)). With temporary permission to change `pool`, it calls [`acquire`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-acquire) with `pool` and stores the result in owned `connection` ([`Connection`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Connection)). With temporary permission to change `connection`, it calls [`query`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-query) with `connection`, `sql` `"SELECT pg_sleep(5)"`, `parameters` from a list with no items, `milliseconds` `6000`, `maximumRows` `1`, and `maximumBytes` `4096` and stores the result in owned `result` ([`Result`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Result)).
+It sets `storage` to a [`NativeDatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-NativeDatabaseStorage). It calls [`storage.open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-NativeDatabaseStorage.open) with `configuration` from the text `{configuration} application_name=aug-qualification-http`, `maximum` `1`, `connectMilliseconds` `2000`, and `cleanupMilliseconds` `100` and stores the result in owned `pool` ([`Pool`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Pool)). With temporary permission to change `pool`, it calls [`acquire`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-acquire) with `pool` and stores the result in owned `connection` ([`Connection`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Connection)). With temporary permission to change `connection`, it calls [`query`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-query) with `connection`, `sql` `"SELECT pg_sleep(5)"`, `parameters` from a list with no items, `milliseconds` `6000`, `maximumRows` `1`, and `maximumBytes` `4096` and stores the result in owned `result` ([`Result`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Result)). [source](work.aug#L5-L10)
+
+<details>
+<summary>Checked interface</summary>
+
+```text
+block(string configuration) returns void unless PostgresError uses DatabaseStorage.open
+```
+
+It takes `configuration` as a string. Failures can raise [`PostgresError`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-PostgresError).
+
+</details>
 
 ## Dependencies
 
-It uses [`NativeDatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-NativeDatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-NativeDatabaseStorage.open)), [`acquire`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-acquire), [`query`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/api.aug.md#symbol-query), [`Connection`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Connection), [`Pool`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Pool), and [`Result`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/bindings.aug.md#symbol-Result) from `postgres`. It uses [`DatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-DatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-DatabaseStorage.open)) and [`PostgresError`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.1.0/contracts.aug.md#symbol-PostgresError).
+It uses [`NativeDatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-NativeDatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-NativeDatabaseStorage.open)), [`acquire`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-acquire), [`query`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/api.aug.md#symbol-query), [`Connection`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Connection), [`Pool`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Pool), and [`Result`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/bindings.aug.md#symbol-Result) from `postgres`. It uses [`DatabaseStorage`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-DatabaseStorage) ([`open`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-DatabaseStorage.open)) and [`PostgresError`](.aug-spec/packages/%40greenpandastudios/aug-postgres/0.2.0/contracts.aug.md#symbol-PostgresError).

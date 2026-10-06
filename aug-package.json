@@ -120,8 +120,8 @@
           "cpuBaseline": "armv8-a"
         },
         "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.2.0/native-macos-arm64.tar.gz",
-        "sha256": "f55118feef70110f8cefb23bfa421225eac81afb3a9633b905cf26748e80f4eb",
-        "maximumDownloadBytes": 2513555,
+        "sha256": "f7ac8b022aae9defe1bd736fb486137277ab591d42ca6c1abd3ff2a701a0d490",
+        "maximumDownloadBytes": 2513557,
         "maximumUnpackedBytes": 5294965,
         "link": {
           "kind": "dynamic",
