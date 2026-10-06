@@ -25,9 +25,9 @@
           "libc": "glibc",
           "cpuBaseline": "armv8-a"
         },
-        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-linux-arm64.tar.gz",
-        "sha256": "ec1041eaf9121149d405aa5ab3c1e1dacbd5962c2b86b6ca1a2231d249397242",
-        "maximumDownloadBytes": 2849855,
+        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.2.0/native-linux-arm64.tar.gz",
+        "sha256": "0b5c0e87c7ef503ddb6c91bf333003c192dc533a5f7afd74b8125ab90d91d0d3",
+        "maximumDownloadBytes": 2849920,
         "maximumUnpackedBytes": 6580635,
         "link": {
           "kind": "dynamic",
@@ -72,8 +72,8 @@
           "libc": "glibc",
           "cpuBaseline": "x86-64"
         },
-        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.1.0/native-linux-x64.tar.gz",
-        "sha256": "3a97a995b712620c0427b33cec51d091008273d713e3712133c6b69d127ba879",
+        "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.2.0/native-linux-x64.tar.gz",
+        "sha256": "f6a5a26177d3a4f2ed879531b49e6c69e759767605988191c47920fecf2e28f4",
         "maximumDownloadBytes": 2602409,
         "maximumUnpackedBytes": 7189515,
         "link": {
@@ -120,9 +120,9 @@
           "cpuBaseline": "armv8-a"
         },
         "url": "https://github.com/GreenPandaStudios/aug-postgres/releases/download/v0.2.0/native-macos-arm64.tar.gz",
-        "sha256": "f7ac8b022aae9defe1bd736fb486137277ab591d42ca6c1abd3ff2a701a0d490",
-        "maximumDownloadBytes": 2513557,
-        "maximumUnpackedBytes": 5294965,
+        "sha256": "d105c0d937d10fcf29bb5f58d2567525d3861cc74cf99158b54cb8e25e4f1317",
+        "maximumDownloadBytes": 2512039,
+        "maximumUnpackedBytes": 5310874,
         "link": {
           "kind": "dynamic",
           "libraries": [

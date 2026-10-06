@@ -16,7 +16,7 @@ export function verifyNativeReleaseDirectory(root,directory){
   const plan=JSON.parse(readFileSync(join(root,'release-candidates.json')));
   const record=JSON.parse(readFileSync(join(directory,'release.json')));
   assert.equal(record.format,1);assert.equal(record.package,manifest.name);assert.equal(record.version,manifest.version);
-  assert.equal(record.sourceRevision,plan.sourceRevision);assert.equal(record.runId,plan.runId);
+  assert.equal(record.sourceRevision,plan.sourceRevision);assert.equal(record.workflowHeadRevision,plan.workflowHeadRevision);assert.equal(record.runId,plan.runId);
   const filenames=nativeReleaseTargets.map(id=>'native-'+id+'.tar.gz').sort();
   assert.deepEqual(readdirSync(directory).sort(),['SHA256SUMS',...filenames,'release.json']);
   assert.deepEqual(record.files.map(file=>file.filename).sort(),filenames,'Release metadata must identify every native target exactly once');
@@ -44,7 +44,7 @@ export function prepareNativePackageRelease(root,input,output){
   const manifest=JSON.parse(readFileSync(join(root,'aug-package.json')));
   const plan=JSON.parse(readFileSync(join(root,'release-candidates.json')));
   assert.equal(plan.format,1);assert.equal(plan.version,manifest.version);
-  assert.match(plan.sourceRevision,/^[0-9a-f]{40}$/);
+  assert.match(plan.sourceRevision,/^[0-9a-f]{40}$/);assert.match(plan.workflowHeadRevision,/^[0-9a-f]{40}$/);
   assert.ok(Number.isSafeInteger(plan.runId)&&plan.runId>0);
   assert.deepEqual(manifest.native.artifacts.map(a=>a.id).sort(),nativeReleaseTargets);
   const candidates=[];
@@ -83,7 +83,7 @@ export function prepareNativePackageRelease(root,input,output){
   mkdirSync(output,{recursive:true});
   const entries=[...selected.values()].sort((a,b)=>a.filename.localeCompare(b.filename));
   for(const item of entries)copyFileSync(item.archive,join(output,item.filename));
-  const record={format:1,package:manifest.name,version:manifest.version,sourceRevision:plan.sourceRevision,runId:plan.runId,
+  const record={format:1,package:manifest.name,version:manifest.version,sourceRevision:plan.sourceRevision,workflowHeadRevision:plan.workflowHeadRevision,runId:plan.runId,
     files:entries.map(({filename,artifact,source,libraryPath,librarySha256})=>({filename,sha256:artifact.sha256,size:artifact.maximumDownloadBytes,target:artifact.target,source,libraryPath,librarySha256}))};
   writeFileSync(join(output,'release.json'),JSON.stringify(record,null,2)+'\n');
   const checksums=entries.map(e=>e.artifact.sha256+'  '+e.filename);
